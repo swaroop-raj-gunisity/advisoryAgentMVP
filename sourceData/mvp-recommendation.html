@@ -1,0 +1,1276 @@
+<title>MVP Recommendation — Advisor AI Copilot</title>
+<style>
+:root {
+  --ground: #FAFAF7;
+  --surface: #FFFFFF;
+  --surface-alt: #F3F4F1;
+  --ink: #1C2B3A;
+  --ink-secondary: #4A5A6B;
+  --ink-muted: #7A8A9B;
+  --accent: #1A6B6B;
+  --accent-light: #E8F4F4;
+  --highlight: #C4850A;
+  --highlight-light: #FDF6E8;
+  --border: #E2E4E0;
+  --border-strong: #C8CCC6;
+  --success: #2D7A4F;
+  --success-light: #E8F5EC;
+  --caution: #9A6B00;
+  --caution-light: #FFF8E6;
+  --critical: #B44A4A;
+  --critical-light: #FDF0F0;
+  --shadow-sm: 0 1px 3px rgba(28,43,58,0.06);
+  --shadow-md: 0 4px 12px rgba(28,43,58,0.08);
+  --radius: 6px;
+  --font-body: "Segoe UI", -apple-system, system-ui, sans-serif;
+  --font-mono: "Cascadia Code", "Consolas", monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #0F1A24;
+    --surface: #162230;
+    --surface-alt: #1C2E3E;
+    --ink: #E8ECF0;
+    --ink-secondary: #A8B8C8;
+    --ink-muted: #6A7A8A;
+    --accent: #4AADAD;
+    --accent-light: #162E2E;
+    --highlight: #E8A820;
+    --highlight-light: #2A2210;
+    --border: #2A3A4A;
+    --border-strong: #3A4A5A;
+    --success: #5AC47A;
+    --success-light: #0F2A1A;
+    --caution: #D4A020;
+    --caution-light: #2A2410;
+    --critical: #E06060;
+    --critical-light: #2A1414;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+  }
+}
+
+:root[data-theme="dark"] {
+  --ground: #0F1A24;
+  --surface: #162230;
+  --surface-alt: #1C2E3E;
+  --ink: #E8ECF0;
+  --ink-secondary: #A8B8C8;
+  --ink-muted: #6A7A8A;
+  --accent: #4AADAD;
+  --accent-light: #162E2E;
+  --highlight: #E8A820;
+  --highlight-light: #2A2210;
+  --border: #2A3A4A;
+  --border-strong: #3A4A5A;
+  --success: #5AC47A;
+  --success-light: #0F2A1A;
+  --caution: #D4A020;
+  --caution-light: #2A2410;
+  --critical: #E06060;
+  --critical-light: #2A1414;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.2);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 48px 32px;
+}
+
+.header {
+  margin-bottom: 40px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+}
+
+.header-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.header h1 {
+  font-size: 30px;
+  font-weight: 300;
+  line-height: 1.25;
+  color: var(--ink);
+  margin-bottom: 8px;
+  text-wrap: balance;
+}
+
+.header-sub {
+  font-size: 15px;
+  color: var(--ink-secondary);
+}
+
+/* Recommendation verdict */
+.verdict {
+  background: var(--accent-light);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 24px 28px;
+  margin-bottom: 40px;
+}
+
+.verdict-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.verdict h2 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.verdict p {
+  font-size: 14px;
+  color: var(--ink-secondary);
+  line-height: 1.6;
+}
+
+/* Tier system */
+.tier {
+  margin-bottom: 36px;
+}
+
+.tier-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.tier-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 3px;
+  letter-spacing: 0.3px;
+}
+
+.tier-badge-1 {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.tier-badge-2 {
+  background: var(--caution-light);
+  color: var(--caution);
+}
+
+.tier-badge-defer {
+  background: var(--critical-light);
+  color: var(--critical);
+}
+
+.tier-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--ink);
+}
+
+.tier-rationale {
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-bottom: 12px;
+  font-style: italic;
+}
+
+/* Candidate cards */
+.candidate {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+}
+
+.candidate-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 10px;
+  gap: 16px;
+}
+
+.candidate-name {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--ink);
+}
+
+.candidate-time {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--success);
+  background: var(--success-light);
+  padding: 2px 8px;
+  border-radius: 3px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.candidate-desc {
+  font-size: 13.5px;
+  color: var(--ink-secondary);
+  margin-bottom: 10px;
+}
+
+.candidate-meta {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--ink-muted);
+}
+
+.candidate-meta dt {
+  font-weight: 600;
+  color: var(--ink-secondary);
+  display: inline;
+}
+
+.candidate-meta dd {
+  display: inline;
+  margin-left: 4px;
+}
+
+.candidate-risk {
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--critical);
+  background: var(--critical-light);
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+.candidate-why {
+  margin-top: 10px;
+  font-size: 12.5px;
+  color: var(--accent);
+  background: var(--accent-light);
+  padding: 6px 10px;
+  border-radius: 4px;
+}
+
+/* Demo flow */
+.demo-section {
+  margin-top: 48px;
+  margin-bottom: 40px;
+}
+
+.demo-section h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.demo-section .sub {
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-bottom: 20px;
+}
+
+.demo-flow {
+  display: grid;
+  gap: 0;
+  position: relative;
+}
+
+.demo-step {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 16px;
+  padding-bottom: 24px;
+  position: relative;
+}
+
+.demo-step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  left: 29px;
+  top: 36px;
+  bottom: 0;
+  width: 1px;
+  background: var(--border-strong);
+}
+
+.demo-step-num {
+  width: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.demo-step-circle {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+}
+
+.demo-step-time {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--ink-muted);
+  margin-top: 4px;
+}
+
+.demo-step-content {
+  padding-top: 4px;
+}
+
+.demo-step-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+
+.demo-step-detail {
+  font-size: 13px;
+  color: var(--ink-secondary);
+}
+
+.demo-step-before-after {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 10px;
+}
+
+@media (max-width: 600px) {
+  .demo-step-before-after { grid-template-columns: 1fr; }
+}
+
+.ba-box {
+  padding: 10px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.ba-before {
+  background: var(--critical-light);
+  color: var(--critical);
+}
+
+.ba-after {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.ba-label {
+  font-weight: 700;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+/* Impact summary */
+.impact {
+  background: var(--highlight-light);
+  border-left: 3px solid var(--highlight);
+  padding: 20px 24px;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  margin-bottom: 40px;
+}
+
+.impact-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--highlight);
+  margin-bottom: 10px;
+}
+
+.impact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.impact-stat {
+  text-align: center;
+}
+
+.impact-num {
+  font-family: var(--font-mono);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.impact-desc {
+  font-size: 12px;
+  color: var(--ink-secondary);
+  margin-top: 2px;
+}
+
+/* Architecture note */
+.arch-note {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 40px;
+}
+
+.arch-note h3 {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 12px;
+}
+
+.arch-list {
+  list-style: none;
+  padding: 0;
+}
+
+.arch-list li {
+  font-size: 13.5px;
+  color: var(--ink-secondary);
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 10px;
+}
+
+.arch-list li:last-child {
+  border-bottom: none;
+}
+
+.arch-list .label {
+  font-weight: 600;
+  color: var(--ink);
+  min-width: 140px;
+  flex-shrink: 0;
+}
+
+.footer {
+  margin-top: 48px;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  color: var(--ink-muted);
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Templates section */
+.template-section {
+  margin-top: 48px;
+  margin-bottom: 40px;
+}
+
+.template-section h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.template-section .sub {
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-bottom: 20px;
+}
+
+.template-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.template-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 20px;
+  background: var(--surface-alt);
+  border-bottom: 1px solid var(--border);
+}
+
+.template-card-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.template-card-tag {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 3px;
+  background: var(--accent-light);
+  color: var(--accent);
+}
+
+.template-card-body {
+  padding: 16px 20px;
+  font-size: 13px;
+  color: var(--ink-secondary);
+  line-height: 1.7;
+  white-space: pre-wrap;
+  font-family: var(--font-mono);
+}
+
+/* Sample Data section */
+.data-section {
+  margin-top: 48px;
+  margin-bottom: 40px;
+}
+
+.data-section h2 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.data-section .sub {
+  font-size: 13px;
+  color: var(--ink-muted);
+  margin-bottom: 20px;
+}
+
+.data-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+.data-block-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--surface-alt);
+  border-bottom: 1px solid var(--border);
+}
+
+.data-block-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.data-block-source {
+  font-size: 11px;
+  color: var(--ink-muted);
+  font-style: italic;
+}
+
+.data-block-required {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+
+.req-mandatory {
+  background: var(--critical-light);
+  color: var(--critical);
+}
+
+.req-recommended {
+  background: var(--caution-light);
+  color: var(--caution);
+}
+
+.req-optional {
+  background: var(--success-light);
+  color: var(--success);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table th {
+  text-align: left;
+  padding: 8px 14px;
+  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--ink-muted);
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-alt);
+}
+
+.data-table td {
+  padding: 7px 14px;
+  border-bottom: 1px solid var(--border);
+  color: var(--ink-secondary);
+  vertical-align: top;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table .field-name {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.data-table .field-val {
+  color: var(--ink);
+  font-weight: 500;
+}
+
+.data-note {
+  padding: 10px 20px;
+  font-size: 12px;
+  color: var(--ink-muted);
+  border-top: 1px solid var(--border);
+  background: var(--surface-alt);
+  font-style: italic;
+}
+</style>
+
+<div class="container">
+
+  <div class="header">
+    <div class="header-eyebrow">MVP Recommendation</div>
+    <h1>Advisor AI Copilot — What to Build First</h1>
+    <div class="header-sub">Demo lens: Advisor Productivity (time reclaimed per workflow)</div>
+  </div>
+
+  <!-- Verdict -->
+  <div class="verdict">
+    <div class="verdict-label">Recommendation</div>
+    <h2>Lead with 3 features, defer 2 to Phase 2</h2>
+    <p>For a productivity-focused demo, you want a tight loop that leadership can see in under 10 minutes: upload a plan, get a brief, prep a meeting, capture the follow-up. The <strong>Client Q&A Copilot</strong> and full <strong>Compliance Assistant</strong> are high-value but carry technical and regulatory risk that slows MVP delivery without strengthening the demo narrative. Include them as a "coming next" slide — not the headline.</p>
+  </div>
+
+  <!-- TIER 1 -->
+  <div class="tier">
+    <div class="tier-header">
+      <span class="tier-badge tier-badge-1">MVP CORE</span>
+      <span class="tier-title">Ship These Three — They Tell One Story</span>
+    </div>
+    <div class="tier-rationale">Together these cover the full arc of a client interaction: prepare → meet → follow up. One workflow, three time savings, one demo.</div>
+
+    <div class="candidate">
+      <div class="candidate-header">
+        <span class="candidate-name">1. Financial Plan Summarization</span>
+        <span class="candidate-time">Saves 45 min/plan</span>
+      </div>
+      <div class="candidate-desc">Agent ingests a 40–80 page plan PDF, produces a 2-page client-ready summary (goals, gaps, next steps) + a separate advisor-facing action checklist. Generates both a "what changed since last review" delta and a full summary.</div>
+      <div class="candidate-meta">
+        <div><dt>Data:</dt><dd>Planning PDFs (MoneyGuide, eMoney, RightCapital)</dd></div>
+        <div><dt>MCP:</dt><dd>Document store connector, planning software API</dd></div>
+      </div>
+      <div class="candidate-why">This IS the Cyan headline. If you build nothing else, build this. Immediately recognizable to any advisor. The before/after is visceral — 60-page PDF vs. 2-page brief.</div>
+    </div>
+
+    <div class="candidate">
+      <div class="candidate-header">
+        <span class="candidate-name">2. Meeting Prep Brief Generator</span>
+        <span class="candidate-time">Saves 30 min/meeting</span>
+      </div>
+      <div class="candidate-desc">Agent pulls data from CRM + custodian, assembles a one-pager: portfolio snapshot, performance vs. benchmark, recent transactions, life events flagged, suggested talking points based on plan gaps and market context.</div>
+      <div class="candidate-meta">
+        <div><dt>Data:</dt><dd>CRM (Salesforce/Redtail), custodian feeds, calendar, prior meeting notes</dd></div>
+        <div><dt>MCP:</dt><dd>CRM connector, custodian API, calendar API</dd></div>
+      </div>
+      <div class="candidate-why">The highest-frequency use case. Advisors do 6–12 meetings/week. Multiply 30 min saved x 8 meetings = 4 hours/week reclaimed. Easy to demo with real-looking data.</div>
+    </div>
+
+    <div class="candidate">
+      <div class="candidate-header">
+        <span class="candidate-name">3. Research Digest Agent</span>
+        <span class="candidate-time">Saves 20 min/day</span>
+      </div>
+      <div class="candidate-desc">Agent monitors fund fact sheets, product updates, and market commentary; matches changes to the advisor's book of business; surfaces a daily brief: "3 things that changed yesterday that matter for your clients."</div>
+      <div class="candidate-meta">
+        <div><dt>Data:</dt><dd>Fund prospectuses, Morningstar data, custodian product shelf, research feeds</dd></div>
+        <div><dt>MCP:</dt><dd>Market data connector, document parser, portfolio holdings API</dd></div>
+      </div>
+      <div class="candidate-why">Demonstrates ongoing, ambient intelligence — the copilot works even when the advisor isn't asking. Shows the agent is proactive, not just reactive. Strong "morning briefing" demo moment.</div>
+    </div>
+  </div>
+
+  <!-- TIER 2 -->
+  <div class="tier">
+    <div class="tier-header">
+      <span class="tier-badge tier-badge-2">PHASE 2</span>
+      <span class="tier-title">Queue for Next Sprint — High Value, Higher Complexity</span>
+    </div>
+    <div class="tier-rationale">These are powerful but carry either technical depth (real-time inference) or regulatory surface area (compliance language) that would slow down the first demo without proportional payoff.</div>
+
+    <div class="candidate">
+      <div class="candidate-header">
+        <span class="candidate-name">4. Client Q&A Copilot (Real-time)</span>
+        <span class="candidate-time">Saves 15 min/meeting</span>
+      </div>
+      <div class="candidate-desc">During a meeting, advisor asks the copilot "what if" questions ("What if we delay Social Security to 70?") and gets instant answers grounded in the client's actual plan data.</div>
+      <div class="candidate-meta">
+        <div><dt>Data:</dt><dd>Financial plan models, tax projections, Social Security tables, portfolio analytics</dd></div>
+        <div><dt>MCP:</dt><dd>Planning engine API, tax calculator, market data</dd></div>
+      </div>
+      <div class="candidate-risk">Risk: Requires low-latency RAG over client-specific data with high accuracy. A wrong number in a live meeting is worse than no number. Needs robust grounding and confidence scoring before it's demo-safe.</div>
+    </div>
+
+    <div class="candidate">
+      <div class="candidate-header">
+        <span class="candidate-name">5. Compliance Documentation Assistant</span>
+        <span class="candidate-time">Saves 25 min/trade</span>
+      </div>
+      <div class="candidate-desc">Auto-drafts suitability memos, trade rationale notes, and disclosure summaries from trade context + client profile. Pre-populates with firm-specific compliance templates and regulatory language.</div>
+      <div class="candidate-meta">
+        <div><dt>Data:</dt><dd>Trade blotter, client risk profiles, IPS, regulatory templates, firm compliance guidelines</dd></div>
+        <div><dt>MCP:</dt><dd>OMS connector, compliance template store, CRM</dd></div>
+      </div>
+      <div class="candidate-risk">Risk: Compliance language must be precise. Regulatory exposure if auto-generated text is used without adequate review workflow. Needs firm-specific template validation and a human-in-the-loop approval gate. Better as Phase 2 once the review UX is proven.</div>
+    </div>
+  </div>
+
+  <!-- Impact -->
+  <div class="impact">
+    <div class="impact-label">Projected Impact — MVP Core (3 Features)</div>
+    <div class="impact-grid">
+      <div class="impact-stat">
+        <div class="impact-num">8–12 hrs</div>
+        <div class="impact-desc">reclaimed per advisor/week</div>
+      </div>
+      <div class="impact-stat">
+        <div class="impact-num">3 systems</div>
+        <div class="impact-desc">unified into one copilot surface</div>
+      </div>
+      <div class="impact-stat">
+        <div class="impact-num">~40%</div>
+        <div class="impact-desc">reduction in prep/admin time</div>
+      </div>
+      <div class="impact-stat">
+        <div class="impact-num">6 weeks</div>
+        <div class="impact-desc">target to working demo</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Demo Flow -->
+  <div class="demo-section">
+    <h2>Recommended Demo Sequence (10 min)</h2>
+    <div class="sub">Walk leadership through one client lifecycle — morning to follow-up — showing each feature in context.</div>
+
+    <div class="demo-flow">
+      <div class="demo-step">
+        <div class="demo-step-num">
+          <div class="demo-step-circle">1</div>
+          <div class="demo-step-time">0:00</div>
+        </div>
+        <div class="demo-step-content">
+          <div class="demo-step-title">Morning: Research Digest arrives</div>
+          <div class="demo-step-detail">Advisor opens their day. The copilot surfaces: "Vanguard Total Bond changed duration strategy; affects 12 of your clients. BlackRock cut fees on IEFA; relevant to 8 accounts." Advisor scans in 30 seconds vs. reading 5 separate research notes.</div>
+          <div class="demo-step-before-after">
+            <div class="ba-box ba-before"><div class="ba-label">Before</div>20 min reading research emails, most irrelevant</div>
+            <div class="ba-box ba-after"><div class="ba-label">After</div>30 sec scan of pre-filtered, book-relevant insights</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-step">
+        <div class="demo-step-num">
+          <div class="demo-step-circle">2</div>
+          <div class="demo-step-time">3:00</div>
+        </div>
+        <div class="demo-step-content">
+          <div class="demo-step-title">Pre-meeting: Plan Summary + Meeting Brief</div>
+          <div class="demo-step-detail">Advisor has a review with the Johnsons at 10am. Copilot already generated: (a) a 2-page summary of their 55-page plan highlighting the retirement gap, (b) a meeting prep brief with portfolio performance, recent Roth conversion, and suggested agenda items.</div>
+          <div class="demo-step-before-after">
+            <div class="ba-box ba-before"><div class="ba-label">Before</div>45 min pulling data from 3 systems, re-reading plan</div>
+            <div class="ba-box ba-after"><div class="ba-label">After</div>2 min reviewing agent-prepared brief, ready to walk in</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="demo-step">
+        <div class="demo-step-num">
+          <div class="demo-step-circle">3</div>
+          <div class="demo-step-time">7:00</div>
+        </div>
+        <div class="demo-step-content">
+          <div class="demo-step-title">The meeting: Advisor is prepared, present, personal</div>
+          <div class="demo-step-detail">Because prep took 2 minutes instead of 45, the advisor spent that time on two additional prospect calls. In the review itself, they're confident, specific, and focused on the conversation — not fumbling through tabs.</div>
+        </div>
+      </div>
+
+      <div class="demo-step">
+        <div class="demo-step-num">
+          <div class="demo-step-circle">4</div>
+          <div class="demo-step-time">8:30</div>
+        </div>
+        <div class="demo-step-content">
+          <div class="demo-step-title">Teaser: "What's Coming Next"</div>
+          <div class="demo-step-detail">Flash the Phase 2 capabilities: real-time Q&A during meetings, auto-drafted compliance memos after trades. Show leadership the roadmap extends — this isn't a one-trick demo, it's a platform.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Architecture -->
+  <div class="arch-note">
+    <h3>MCP Integration Architecture (MVP)</h3>
+    <ul class="arch-list">
+      <li><span class="label">Document Ingestion</span>MCP server for PDF parsing (plans, prospectuses, fact sheets) — structured extraction via layout-aware models</li>
+      <li><span class="label">CRM Connector</span>MCP server for Salesforce/Redtail — read client profiles, notes, tasks, life events, meeting history</li>
+      <li><span class="label">Custodian Data</span>MCP server for portfolio holdings, performance, transactions (Schwab/Fidelity/Pershing APIs)</li>
+      <li><span class="label">Market/Research</span>MCP server for fund data feeds, Morningstar analytics, research note ingestion</li>
+      <li><span class="label">Output Layer</span>Agent generates structured JSON → rendered as branded briefs, summaries, and action lists in advisor UI</li>
+      <li><span class="label">Guardrails</span>All outputs are advisor-facing drafts — never auto-sent to clients. Human-in-the-loop by design.</li>
+    </ul>
+  </div>
+
+  <!-- Why not the other two -->
+  <div class="arch-note">
+    <h3>Why Defer Q&A Copilot and Compliance to Phase 2</h3>
+    <ul class="arch-list">
+      <li><span class="label">Q&A Copilot</span>Real-time inference needs sub-2s latency, high numerical accuracy, and confidence scoring. A wrong projection shown live to a client (or in a demo) is a credibility risk. Better to prove the data layer works in Phases 1 briefs before exposing it interactively.</li>
+      <li><span class="label">Compliance Asst.</span>Regulatory language is zero-tolerance for errors. Firms need to validate templates, build approval workflows, and potentially get legal sign-off. High value once the platform is trusted — but premature as the first thing leadership sees.</li>
+      <li><span class="label">Demo narrative</span>Three features tell one clean story (prepare → brief → follow up). Five features dilute the demo into a feature tour. Constraint makes the pitch sharper.</li>
+    </ul>
+  </div>
+
+  <!-- TEMPLATES SECTION -->
+  <div class="template-section">
+    <h2>Predefined Templates (Good-to-Have)</h2>
+    <div class="sub">Agent uses these as output scaffolds. Advisor can customize tone/branding. Templates ensure consistency across the practice.</div>
+
+    <div class="template-card">
+      <div class="template-card-header">
+        <span class="template-card-title">Plan Summary — Client-Facing Brief</span>
+        <span class="template-card-tag">Plan Summarization</span>
+      </div>
+      <div class="template-card-body">Subject: Your Financial Plan Summary — [Month Year] Review
+
+Hi [First Name],
+
+Here's a clear summary of your financial plan as of [Date]:
+
+YOUR GOALS
+• [Goal 1]: [Status — On Track / Needs Attention / Action Required]
+• [Goal 2]: [Status]
+• [Goal 3]: [Status]
+
+KEY NUMBERS
+• Retirement readiness: [X]% funded (target: [Date])
+• Monthly savings rate: $[X] ([X]% of income)
+• Portfolio value: $[X] (up/down [X]% since last review)
+
+WHAT'S CHANGED SINCE LAST TIME
+• [Change 1 — plain language]
+• [Change 2 — plain language]
+
+NEXT STEPS (action required)
+1. [Action] — by [Date]
+2. [Action] — by [Date]
+
+Questions? Let's discuss at our [next meeting date].
+
+[Advisor Name]</div>
+    </div>
+
+    <div class="template-card">
+      <div class="template-card-header">
+        <span class="template-card-title">Meeting Prep Brief — Advisor Internal</span>
+        <span class="template-card-tag">Meeting Prep</span>
+      </div>
+      <div class="template-card-body">═══════════════════════════════════════
+CLIENT MEETING BRIEF — [Client Name]
+[Date] | [Time] | [Location/Zoom]
+═══════════════════════════════════════
+
+PORTFOLIO SNAPSHOT
+  Total AUM:        $[X]
+  YTD Return:       [X]% (vs. benchmark [X]%)
+  Last Rebalance:   [Date]
+  Cash Position:    $[X] ([X]%)
+
+RECENT ACTIVITY (since last meeting)
+  • [Transaction/event 1]
+  • [Transaction/event 2]
+
+LIFE EVENTS & FLAGS
+  ⚑ [Life event — e.g., "Daughter starting college Fall 2027"]
+  ⚑ [Flag — e.g., "RMD due by Dec 31"]
+
+SUGGESTED TALKING POINTS
+  1. [Topic — tied to plan gap or market event]
+  2. [Topic — tied to life event]
+  3. [Topic — tied to portfolio observation]
+
+OPEN ACTION ITEMS (from last meeting)
+  ☐ [Item] — [Status]
+  ☐ [Item] — [Status]
+
+COMPLIANCE NOTE
+  Risk Profile: [Moderate Growth] | Last KYC: [Date]
+  IPS Review Due: [Date]</div>
+    </div>
+
+    <div class="template-card">
+      <div class="template-card-header">
+        <span class="template-card-title">Post-Meeting Follow-Up Email</span>
+        <span class="template-card-tag">Meeting Prep</span>
+      </div>
+      <div class="template-card-body">Subject: Follow-Up from Our [Meeting Type] — [Date]
+
+Hi [First Name],
+
+Great speaking with you today. Here's a recap of what we covered
+and what happens next:
+
+WHAT WE DISCUSSED
+• [Topic 1 — one sentence summary]
+• [Topic 2 — one sentence summary]
+
+ACTION ITEMS
+  You:
+  • [Client action] — by [Date]
+  • [Client action] — by [Date]
+
+  Our team:
+  • [Advisor action] — by [Date]
+  • [Advisor action] — by [Date]
+
+NEXT MEETING
+  [Date] at [Time] — [Purpose]
+
+As always, reach out anytime between now and then if something
+comes up.
+
+Best,
+[Advisor Name]</div>
+    </div>
+
+    <div class="template-card">
+      <div class="template-card-header">
+        <span class="template-card-title">Daily Research Digest — Morning Brief</span>
+        <span class="template-card-tag">Research Digest</span>
+      </div>
+      <div class="template-card-body">═══════════════════════════════════════
+MORNING BRIEF — [Date]
+[X] items relevant to your book
+═══════════════════════════════════════
+
+▸ HIGH PRIORITY
+  [Fund/Product Name] — [What changed]
+  Impact: Affects [X] clients | $[X] AUM exposed
+  Suggested action: [One sentence]
+
+▸ MONITOR
+  [Fund/Product Name] — [What changed]
+  Impact: Affects [X] clients
+  No action needed yet — reviewing.
+
+▸ FYI
+  [Market/macro event] — [One sentence relevance]
+
+───────────────────────────────────────
+Clients most affected today:
+  1. [Client Name] — [Why]
+  2. [Client Name] — [Why]</div>
+    </div>
+
+    <div class="template-card">
+      <div class="template-card-header">
+        <span class="template-card-title">Client Review Packet — Quarterly Summary</span>
+        <span class="template-card-tag">Plan Summarization</span>
+      </div>
+      <div class="template-card-body">═══════════════════════════════════════
+QUARTERLY REVIEW — [Client Name]
+[Quarter] [Year]
+═══════════════════════════════════════
+
+PERFORMANCE SUMMARY
+  Portfolio Return:   [X]% (vs. [Benchmark] [X]%)
+  Since Inception:    [X]% annualized
+  Income Generated:   $[X]
+
+ALLOCATION vs. TARGET
+  Equities:   [X]% (target [X]%) [Over/Under/On target]
+  Fixed Inc:  [X]% (target [X]%)
+  Alts:       [X]% (target [X]%)
+  Cash:       [X]% (target [X]%)
+
+GOAL PROGRESS
+  • [Goal 1]: [Progress bar concept — X% funded]
+  • [Goal 2]: [Progress bar concept — X% funded]
+
+NOTABLE CHANGES THIS QUARTER
+  • [Action taken — e.g., "Rebalanced to reduce tech overweight"]
+  • [Action taken — e.g., "Harvested $12K in tax losses"]
+
+LOOKING AHEAD
+  • [What we're watching]
+  • [Upcoming milestone or decision point]</div>
+    </div>
+  </div>
+
+  <!-- SAMPLE DATA SECTION -->
+  <div class="data-section">
+    <h2>Sample Data Formats — One Client Profile</h2>
+    <div class="sub">Realistic sample showing the data shape the agent consumes. Uses standard CRM out-of-box (OOB) field names. Client: "Robert & Patricia Chen" — $1.8M household.</div>
+
+    <!-- CRM: Contact/Account -->
+    <div class="data-block">
+      <div class="data-block-header">
+        <div>
+          <span class="data-block-title">CRM — Contact Record (Primary)</span>
+          <div class="data-block-source">Source: Salesforce Financial Services Cloud / Redtail CRM</div>
+        </div>
+        <span class="data-block-required req-mandatory">Mandatory</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Field (OOB)</th><th>Value</th><th>Type</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="field-name">Contact.FirstName</td><td class="field-val">Robert</td><td>String</td></tr>
+          <tr><td class="field-name">Contact.LastName</td><td class="field-val">Chen</td><td>String</td></tr>
+          <tr><td class="field-name">Contact.Email</td><td class="field-val">robert.chen@email.com</td><td>String</td></tr>
+          <tr><td class="field-name">Contact.Phone</td><td class="field-val">(415) 555-0182</td><td>String</td></tr>
+          <tr><td class="field-name">Contact.Birthdate</td><td class="field-val">1968-03-14</td><td>Date</td></tr>
+          <tr><td class="field-name">Contact.FinServ__Age__c</td><td class="field-val">58</td><td>Integer</td></tr>
+          <tr><td class="field-name">Account.Name</td><td class="field-val">Chen Household</td><td>String</td></tr>
+          <tr><td class="field-name">Account.FinServ__TotalAUM__c</td><td class="field-val">1,842,500.00</td><td>Currency</td></tr>
+          <tr><td class="field-name">Account.FinServ__InvestmentObjective__c</td><td class="field-val">Growth & Income</td><td>Picklist</td></tr>
+          <tr><td class="field-name">Account.FinServ__RiskTolerance__c</td><td class="field-val">Moderate</td><td>Picklist</td></tr>
+          <tr><td class="field-name">Contact.FinServ__MaritalStatus__c</td><td class="field-val">Married</td><td>Picklist</td></tr>
+          <tr><td class="field-name">Contact.FinServ__EmploymentStatus__c</td><td class="field-val">Employed</td><td>Picklist</td></tr>
+          <tr><td class="field-name">Contact.Title</td><td class="field-val">VP Engineering, Salesforce</td><td>String</td></tr>
+          <tr><td class="field-name">Account.FinServ__PrimaryAdvisor__c</td><td class="field-val">Sarah Mitchell, CFP</td><td>Lookup</td></tr>
+          <tr><td class="field-name">Account.FinServ__ServiceModel__c</td><td class="field-val">Tier 1 — Wealth</td><td>Picklist</td></tr>
+          <tr><td class="field-name">Account.FinServ__NextReviewDate__c</td><td class="field-val">2026-09-15</td><td>Date</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CRM: Life Events -->
+    <div class="data-block">
+      <div class="data-block-header">
+        <div>
+          <span class="data-block-title">CRM — Life Events</span>
+          <div class="data-block-source">Source: Salesforce FinServ__LifeEvent__c object</div>
+        </div>
+        <span class="data-block-required req-mandatory">Mandatory</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Field (OOB)</th><th>Value</th><th>Type</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="field-name">FinServ__LifeEvent__c.Name</td><td class="field-val">Daughter College Enrollment</td><td>String</td></tr>
+          <tr><td class="field-name">FinServ__LifeEvent__c.EventType</td><td class="field-val">Education</td><td>Picklist</td></tr>
+          <tr><td class="field-name">FinServ__LifeEvent__c.EventDate</td><td class="field-val">2027-08-15</td><td>Date</td></tr>
+          <tr><td class="field-name">FinServ__LifeEvent__c.Description</td><td class="field-val">Emily Chen starting at UC Berkeley — 529 drawdown begins</td><td>Text</td></tr>
+          <tr><td class="field-name">FinServ__LifeEvent__c.Name</td><td class="field-val">Planned Retirement</td><td>String</td></tr>
+          <tr><td class="field-name">FinServ__LifeEvent__c.EventType</td><td class="field-val">Retirement</td><td>Picklist</td></tr>
+          <tr><td class="field-name">FinServ__LifeEvent__c.EventDate</td><td class="field-val">2033-03-14</td><td>Date</td></tr>
+          <tr><td class="field-name">FinServ__LifeEvent__c.Description</td><td class="field-val">Target retirement at age 65 — both Robert & Patricia</td><td>Text</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CRM: Notes -->
+    <div class="data-block">
+      <div class="data-block-header">
+        <div>
+          <span class="data-block-title">CRM — Activity / Notes</span>
+          <div class="data-block-source">Source: Salesforce Task / FinServ__ContactNote__c</div>
+        </div>
+        <span class="data-block-required req-mandatory">Mandatory</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Field (OOB)</th><th>Value</th><th>Type</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="field-name">Task.Subject</td><td class="field-val">Annual Review — Chen Household</td><td>String</td></tr>
+          <tr><td class="field-name">Task.ActivityDate</td><td class="field-val">2026-03-22</td><td>Date</td></tr>
+          <tr><td class="field-name">Task.Status</td><td class="field-val">Completed</td><td>Picklist</td></tr>
+          <tr><td class="field-name">Task.Description</td><td class="field-val">Discussed Roth conversion ladder strategy. Robert interested in converting $75K/yr pre-retirement. Patricia concerned about tax impact. Agreed to model 3 scenarios for next call.</td><td>Long Text</td></tr>
+          <tr><td class="field-name">Task.Subject</td><td class="field-val">Follow-up: Roth Conversion Scenarios</td><td>String</td></tr>
+          <tr><td class="field-name">Task.ActivityDate</td><td class="field-val">2026-04-05</td><td>Date</td></tr>
+          <tr><td class="field-name">Task.Status</td><td class="field-val">Completed</td><td>Picklist</td></tr>
+          <tr><td class="field-name">Task.Priority</td><td class="field-val">High</td><td>Picklist</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CRM: Open Tasks -->
+    <div class="data-block">
+      <div class="data-block-header">
+        <div>
+          <span class="data-block-title">CRM — Open Tasks</span>
+          <div class="data-block-source">Source: Salesforce Task (Status != Completed)</div>
+        </div>
+        <span class="data-block-required req-recommended">Recommended</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Field (OOB)</th><th>Value</th><th>Type</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="field-name">Task.Subject</td><td class="field-val">Update beneficiary on IRA (Patricia added)</td><td>String</td></tr>
+          <tr><td class="field-name">Task.ActivityDate</td><td class="field-val">2026-08-30</td><td>Date</td></tr>
+          <tr><td class="field-name">Task.Status</td><td class="field-val">In Progress</td><td>Picklist</td></tr>
+          <tr><td class="field-name">Task.OwnerId</td><td class="field-val">Sarah Mitchell</td><td>Lookup</td></tr>
+          <tr><td class="field-name">Task.Subject</td><td class="field-val">529 distribution plan — model for Fall 2027</td><td>String</td></tr>
+          <tr><td class="field-name">Task.ActivityDate</td><td class="field-val">2026-09-15</td><td>Date</td></tr>
+          <tr><td class="field-name">Task.Status</td><td class="field-val">Not Started</td><td>Picklist</td></tr>
+          <tr><td class="field-name">Task.OwnerId</td><td class="field-val">Sarah Mitchell</td><td>Lookup</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Custodian Data -->
+    <div class="data-block">
+      <div class="data-block-header">
+        <div>
+          <span class="data-block-title">Custodian — Portfolio Holdings (Chen Household)</span>
+          <div class="data-block-source">Source: Schwab Advisor Services API / Fidelity Wealthscape</div>
+        </div>
+        <span class="data-block-required req-recommended">Recommended</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Account</th><th>Ticker</th><th>Name</th><th>Shares</th><th>Market Value</th><th>% of Port</th><th>Cost Basis</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Joint Brokerage</td><td class="field-val">VTI</td><td>Vanguard Total Stock Market ETF</td><td>820</td><td>$302,580</td><td>16.4%</td><td>$245,200</td></tr>
+          <tr><td>Joint Brokerage</td><td class="field-val">AGG</td><td>iShares Core US Agg Bond ETF</td><td>1,450</td><td>$141,274</td><td>7.7%</td><td>$152,800</td></tr>
+          <tr><td>Robert IRA</td><td class="field-val">VTI</td><td>Vanguard Total Stock Market ETF</td><td>1,200</td><td>$442,800</td><td>24.0%</td><td>$318,000</td></tr>
+          <tr><td>Robert IRA</td><td class="field-val">VXUS</td><td>Vanguard Total Intl Stock ETF</td><td>2,100</td><td>$126,420</td><td>6.9%</td><td>$110,250</td></tr>
+          <tr><td>Robert Roth IRA</td><td class="field-val">VTI</td><td>Vanguard Total Stock Market ETF</td><td>540</td><td>$199,260</td><td>10.8%</td><td>$162,000</td></tr>
+          <tr><td>Patricia IRA</td><td class="field-val">AGG</td><td>iShares Core US Agg Bond ETF</td><td>2,200</td><td>$214,346</td><td>11.6%</td><td>$225,500</td></tr>
+          <tr><td>Patricia IRA</td><td class="field-val">VTI</td><td>Vanguard Total Stock Market ETF</td><td>450</td><td>$166,050</td><td>9.0%</td><td>$135,000</td></tr>
+          <tr><td>529 (Emily)</td><td class="field-val">VGIT</td><td>Vanguard Interm-Term Treasury ETF</td><td>1,100</td><td>$66,770</td><td>3.6%</td><td>$68,200</td></tr>
+          <tr><td>—</td><td>—</td><td><strong>Cash & Money Market</strong></td><td>—</td><td><strong>$183,000</strong></td><td><strong>9.9%</strong></td><td>—</td></tr>
+        </tbody>
+      </table>
+      <div class="data-note">Custodian data enriches meeting prep and research digest. Marked "Recommended" not "Mandatory" — the MVP can function with plan PDFs alone for initial demo, but custodian integration significantly elevates the meeting brief quality and enables portfolio-level alerts.</div>
+    </div>
+
+    <!-- Custodian: Account Summary -->
+    <div class="data-block">
+      <div class="data-block-header">
+        <div>
+          <span class="data-block-title">Custodian — Account-Level Summary</span>
+          <div class="data-block-source">Source: Schwab Advisor Services API</div>
+        </div>
+        <span class="data-block-required req-recommended">Recommended</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Field</th><th>Value</th><th>Type</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="field-name">account_number</td><td class="field-val">****-7821</td><td>String (masked)</td></tr>
+          <tr><td class="field-name">account_type</td><td class="field-val">Traditional IRA</td><td>Enum</td></tr>
+          <tr><td class="field-name">account_holder</td><td class="field-val">Robert Chen</td><td>String</td></tr>
+          <tr><td class="field-name">market_value</td><td class="field-val">569,220.00</td><td>Decimal</td></tr>
+          <tr><td class="field-name">cash_balance</td><td class="field-val">12,400.00</td><td>Decimal</td></tr>
+          <tr><td class="field-name">ytd_return_pct</td><td class="field-val">8.42</td><td>Decimal</td></tr>
+          <tr><td class="field-name">ytd_contributions</td><td class="field-val">0.00</td><td>Decimal</td></tr>
+          <tr><td class="field-name">ytd_distributions</td><td class="field-val">0.00</td><td>Decimal</td></tr>
+          <tr><td class="field-name">last_rebalance_date</td><td class="field-val">2026-02-18</td><td>Date</td></tr>
+          <tr><td class="field-name">cost_basis_method</td><td class="field-val">Specific Identification</td><td>Enum</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Fund Data -->
+    <div class="data-block">
+      <div class="data-block-header">
+        <div>
+          <span class="data-block-title">Fund Data Feed — Market Examples</span>
+          <div class="data-block-source">Source: Morningstar Direct / Fund provider APIs (live market data)</div>
+        </div>
+        <span class="data-block-required req-mandatory">Mandatory for Research Digest</span>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr><th>Field</th><th>VTI</th><th>AGG</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="field-name">fund_name</td><td class="field-val">Vanguard Total Stock Market ETF</td><td class="field-val">iShares Core US Aggregate Bond ETF</td></tr>
+          <tr><td class="field-name">ticker</td><td class="field-val">VTI</td><td class="field-val">AGG</td></tr>
+          <tr><td class="field-name">asset_class</td><td>US Equity — Large Blend</td><td>US Fixed Income — Interm Core Bond</td></tr>
+          <tr><td class="field-name">expense_ratio</td><td class="field-val">0.03%</td><td class="field-val">0.03%</td></tr>
+          <tr><td class="field-name">net_assets</td><td class="field-val">$2.3 Trillion</td><td class="field-val">$137.1 Billion</td></tr>
+          <tr><td class="field-name">yield_ttm</td><td class="field-val">1.06%</td><td class="field-val">4.05%</td></tr>
+          <tr><td class="field-name">inception_date</td><td>2000-11-13</td><td>2003-09-22</td></tr>
+          <tr><td class="field-name">benchmark</td><td>CRSP US Total Market Index</td><td>Bloomberg US Aggregate Bond Index</td></tr>
+          <tr><td class="field-name">52wk_range</td><td>$309.36 — $380.94</td><td>$94.11 — $100.48</td></tr>
+          <tr><td class="field-name">top_sector</td><td>Technology (36.07%)</td><td>Treasury/Govt (42.8%)</td></tr>
+          <tr><td class="field-name">top_10_concentration</td><td>31.88%</td><td>N/A (6,000+ holdings)</td></tr>
+          <tr><td class="field-name">strategy_change_flag</td><td>None</td><td>Duration shift noted Q2 2026</td></tr>
+        </tbody>
+      </table>
+      <div class="data-note">The Research Digest agent monitors the strategy_change_flag, expense_ratio changes, and benchmark shifts. When a change is detected, it cross-references against the advisor's book to determine client impact. VTI and AGG data sourced from Yahoo Finance / Vanguard / iShares (Aug 2026).</div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    <span>Advisor AI Copilot — MVP Strategy</span>
+    <span>August 2026</span>
+  </div>
+
+</div>

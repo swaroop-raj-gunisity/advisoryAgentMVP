@@ -1,0 +1,29 @@
+DOCUMENT TEMPLATE
+DOCUMENT NAME: Compliance Review and Suitability Document
+DOCUMENT ID: COMP_DOC_001
+
+CLIENT DETAILS:
+- Client Name: {client_name}
+- Client Household: {client_household}
+- Primary Advisor: {primary_advisor}
+
+ACCOUNT DETAILS:
+- Account Number(s): {account_numbers}
+- Service Model Tier: {service_model_tier}
+- Total AUM Managed: {total_aum}
+
+SECTIONS & ASSEMBLED MEMOS:
+--------------------------------------------------------------------------------
+SECTION 1: PORTFOLIO ALLOCATION AND SUITABILITY
+--------------------------------------------------------------------------------
+[INSERT_MEMO: MEMO_SUIT_001]
+
+--------------------------------------------------------------------------------
+SECTION 2: TRANSACTION SUMMARY AND TRADE RATIONALE
+--------------------------------------------------------------------------------
+[INSERT_MEMO: MEMO_TRAD_001]
+
+SIGNATURES:
+Compliance Officer Signature: ___________________________ Date: _______________
+Advisor Signature: ____________________________________ Date: _______________
+Client Signature (if required): ________________________ Date: _______________

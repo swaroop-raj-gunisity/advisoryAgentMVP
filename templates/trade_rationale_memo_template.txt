@@ -1,0 +1,9 @@
+MEMO ID: MEMO_TRAD_001
+MEMO NAME: Trade Rationale Memo (The "Why Today" Note)
+PURPOSE: Document the specific business and strategic reasons for executing trades on this date.
+
+[TRADE RATIONALE DISCUSSION]
+Trades executed on this date were triggered by {rebalance_trigger_event}. The asset allocation had drifted by {drift_percentage}%, violating the target variance bandwidth of 5.00%. Execution of these trades aligns the portfolio with its target asset allocation. As part of this reallocation, an estimated ${tax_loss_harvested_amount} in capital losses was harvested, which will be carried forward to offset future capital gains and up to $3,000 in ordinary income, enhancing the portfolio's after-tax performance.
+
+[COMPLIANCE SIGN-OFF]
+This trading activity was executed in accordance with the firm's portfolio rebalancing policy and best execution guidelines. No churning or artificial transaction volume was generated.

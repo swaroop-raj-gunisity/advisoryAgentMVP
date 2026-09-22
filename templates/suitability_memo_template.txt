@@ -1,0 +1,9 @@
+MEMO ID: MEMO_SUIT_001
+MEMO NAME: Suitability Memo (The "Why This Client" Note)
+PURPOSE: Document alignment of recommendation with client risk profile and long-term financial goals.
+
+[SUITABILITY DISCUSSION]
+Client risk profile is categorized as {client_risk_tolerance}. The primary investment objective is identified as {investment_objective}. Given the client's stated time horizon of {time_horizon} years, the recommended portfolio allocation and constituent holdings are deemed suitable. The allocation is designed to optimize expected returns while remaining strictly within the client's volatility tolerance thresholds.
+
+[COMPLIANCE SIGN-OFF]
+This recommendation complies with Section 206 of the Investment Advisers Act of 1940 and the SEC's Regulation Best Interest (Reg BI) guidelines.

@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "google-drive": {
+      "command": "node",
+      "args": ["mcp/google-drive-server.js"],
+      "env": {
+        "GOOGLE_DRIVE_FOLDER_ID": "${GOOGLE_DRIVE_FOLDER_ID}",
+        "GCP_OAUTH_KEYS_PATH": "${GCP_OAUTH_KEYS_PATH}",
+        "GCP_TOKEN_PATH": "${GCP_TOKEN_PATH}"
+      }
+    }
+  }
+}
